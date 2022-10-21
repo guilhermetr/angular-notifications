@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
+import { NotificationsService } from './services/notifications.service';
 
 @Component({
   selector: 'app-root',
@@ -10,15 +11,15 @@ import { SwPush } from '@angular/service-worker';
 `})
 export class AppComponent {
 
-  readonly VAPID_PUBLIC_KEY = "BB6QW1_dhyh2Wz8pQUvJPA1PTZyw_yyS9X60clUa4xxNQ9ct_Jq8G-CGHclXIUI8z4XQVV-I5fl5GXcrkEKlQ30";
+  readonly VAPID_PUBLIC_KEY = "BNzt4HejVMO1jvXSze3qSbh3LKuWSV5t8rcIQRANqiZTvszR08nOxSDkXfiS96o9GS5RMr4OZhDEVjDi6hXy-rE";
 
-  constructor(private swPush: SwPush) {}
+  constructor(private swPush: SwPush, private notificationsService: NotificationsService) {}
 
   subscribeToNotifications() {
           this.swPush.requestSubscription({
           serverPublicKey: this.VAPID_PUBLIC_KEY
       })
-      .then(sub => { /* storeSubscriptionInTheBackend(sub) */ })
+      .then(sub => { this.notificationsService.addPushSubscriber(sub) })
       .catch(err => console.error("Could not subscribe to notifications", err));
   }
 }
